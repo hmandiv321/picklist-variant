@@ -109,8 +109,6 @@
   console.log(`${JSON.stringify(deleteEdi)}\n`)
   console.log(".....................................................................\n")
 
-  // remove a single document from existingDocumentTypes
-    // existingDocumentTypes = existingDocumentTypes.filter((doc) => doc.value !== deleteEdi.value);
   // remove multiple documentTypes
     existingDocumentTypes = existingDocumentTypes.filter(
       (existingDocumentType) =>
