@@ -100,8 +100,6 @@
                                 //DELETE\\
 /////////////////////////////////////////////////////////////////////////////////////
 
-  // ********************** ADD Support for multiple deletes **********************
-
   // have to figure ux flow and control as to how a user will delete
   // this is just to check how the data can shrink automatically
   // user removes a document type
