@@ -2,7 +2,6 @@
   console.log("Loading..............................................................\n")
 
   // inputs
-
   const edis = [
     {documentTypeKey: 4,  description: 'ASN' },
     { documentTypeKey: 1, description: 'Invoice' },
@@ -18,6 +17,9 @@
     { documentTypeKey: 6, description: 'Remittance Advice' }
   ].map((doc)=> ({value: doc.documentTypeKey, label: doc.description}));
 
+  const addEdi = { value: 2, label: 'PO' };
+  const deleteEdi = { value: 3, label: 'PO Acknowledgement Status' };
+
   // derived from edis 
   let existingDocumentTypes = [...edis];
   console.log("Initial Existing Document Types:- \n",existingDocumentTypes,"\n")
@@ -32,7 +34,7 @@
   );
   console.log("Initial Available Document Types:- \n",getAvailableDocumentTypes(),"\n")
 
-  const saveEDI = () => existingDocumentTypes.map((doc)=>({documentTypeKey: doc.value, description:                             doc.label}));
+  const saveEDI = () => existingDocumentTypes.map((doc)=>({documentTypeKey: doc.value, description: doc.label}));
 /////////////////////////////////////////////////////////////////////////////////////
                                   // ADD \\
 /////////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +43,6 @@
   // can add document only when they are available
   // have to figure ux flow and control as to how a user will add
   // this is just to check how the data can grow automatically
-  const addEdi = { value: 2, label: 'PO' };
   console.log(".....................................................................\n")
   console.log("USER TRIES TO ADD A NEW DOCUMENT TYPE TO THE EXISTING DOCUMENT TYPES\n")
   console.log(`${JSON.stringify(addEdi)}\n`)
@@ -69,10 +70,26 @@
 
   // user edits a document type
   console.log(".....................................................................\n")
-  console.log("USER EDITS A NEW DOCUMENT TYPE\n")
-  console.log("NEED TO FIGURE OUT HOW\n")
+  console.log("USER EDITS A DOCUMENT TYPE\n")
+  console.log(`Replaces ${JSON.stringify(addEdi)}\n`)
+  console.log(`Adds ${JSON.stringify(getAvailableDocumentTypes()[0])}\n`)
   console.log(".....................................................................\n")
 
+  const edit = (currentDocumentType, newDocumentType) => {
+    if (!checkIfDocumentIsAvailable(currentDocumentType) && checkIfDocumentIsAvailable(newDocumentType)) {
+      existingDocumentTypes = [
+        ...existingDocumentTypes.filter((doc) => doc.value !== currentDocumentType.value),
+        newDocumentType
+      ]
+    }
+  }
+
+  edit(addEdi, getAvailableDocumentTypes()[0]);
+
+  console.log("New Existing Document Types:- \n",existingDocumentTypes,"\n")
+  console.log("New Available Document Types:- \n",getAvailableDocumentTypes(),"\n")
+  console.log("User Saves EDIS....\n")
+  console.log("EDIS:- ",saveEDI(),"\n")
 /////////////////////////////////////////////////////////////////////////////////////
                                 //DELETE\\
 /////////////////////////////////////////////////////////////////////////////////////
@@ -81,7 +98,6 @@
 
   // user removes a document type
   // this removed document type should be available
-  const deleteEdi = { value: 4, label: 'ASN' };
   console.log(".....................................................................\n")
   console.log("USER REMOVES A NEW DOCUMENT TYPE\n")
   console.log(`${JSON.stringify(deleteEdi)}\n`)
