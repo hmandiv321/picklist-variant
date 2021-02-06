@@ -18,7 +18,7 @@
   ].map((doc)=> ({value: doc.documentTypeKey, label: doc.description}));
 
   const addEdi = { value: 6, label: 'Remittance Advice' };
-  const deleteEdi = [{ value: 6, label: 'Remittance Advice' },{value: 2,  label: 'PO' }]; 
+  const deleteEdi = [{ value: 6, label: 'Remittance Advice' },{value: 5,  label: 'Claim' }]; 
   const editEdi = { value: 1, label: 'Invoice' }; 
 
   // derived from edis 
@@ -72,7 +72,7 @@
   existingDocumentTypes = checkIfDocumentIsAvailable(addEdi) ? [
     ...existingDocumentTypes,
     addEdi
-  ] : [...existingDocumentTypes]
+  ] : existingDocumentTypes
 
   console.log("New Existing Document Types:- \n",existingDocumentTypes,"\n")
   console.log("New Available Document Types:- \n",getAvailableDocumentTypes(),"\n")
