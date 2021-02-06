@@ -18,7 +18,8 @@
   ].map((doc)=> ({value: doc.documentTypeKey, label: doc.description}));
 
   const addEdi = { value: 2, label: 'PO' };
-  const deleteEdi = { value: 3, label: 'PO Acknowledgement Status' };
+  const deleteEdi = { value: 4, label: 'ASN' }; 
+  const editEdi = { value: 1, label: 'Invoice' }; 
 
   // derived from edis 
   let existingDocumentTypes = [...edis];
@@ -27,6 +28,7 @@
   // derived from both existingDocumentTypes and documentTypes
   const getAvailableDocumentTypes = () => documentTypes.filter(
     (documentType) =>
+      // returns true for document type that does not exist in existingDocumentTypes
       existingDocumentTypes.filter(
         (existingDocumentType) =>
           documentType.label === existingDocumentType.label
@@ -71,20 +73,23 @@
   // user edits a document type
   console.log(".....................................................................\n")
   console.log("USER EDITS A DOCUMENT TYPE\n")
-  console.log(`Replaces ${JSON.stringify(addEdi)}\n`)
+  console.log(`Replaces ${JSON.stringify(editEdi)}\n`)
   console.log(`Adds ${JSON.stringify(getAvailableDocumentTypes()[0])}\n`)
   console.log(".....................................................................\n")
 
   const edit = (currentDocumentType, newDocumentType) => {
-    if (!checkIfDocumentIsAvailable(currentDocumentType) && checkIfDocumentIsAvailable(newDocumentType)) {
-      existingDocumentTypes = [
-        ...existingDocumentTypes.filter((doc) => doc.value !== currentDocumentType.value),
-        newDocumentType
-      ]
-    }
+    !checkIfDocumentIsAvailable(currentDocumentType) &&
+    checkIfDocumentIsAvailable(newDocumentType)
+      ? existingDocumentTypes = [
+          ...existingDocumentTypes.filter(
+            (doc) => doc.value !== currentDocumentType.value
+          ),
+          newDocumentType,
+        ]
+      : existingDocumentTypes;
   }
 
-  edit(addEdi, getAvailableDocumentTypes()[0]);
+  edit(editEdi, getAvailableDocumentTypes()[0]);
 
   console.log("New Existing Document Types:- \n",existingDocumentTypes,"\n")
   console.log("New Available Document Types:- \n",getAvailableDocumentTypes(),"\n")
