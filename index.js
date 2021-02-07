@@ -3,9 +3,10 @@
 
   // inputs
   const edis = [
-    {documentTypeKey: 4,  description: 'ASN' },
+    // {documentTypeKey: 4,  description: 'ASN' },
     {documentTypeKey: 1, description: 'Invoice' },
     {documentTypeKey: 5,  description: 'Claim' },
+    { documentTypeKey: 2, description: 'PO' }
   ].map((doc)=> ({value: doc.documentTypeKey, label: doc.description}));
 
   const documentTypes = [
@@ -40,9 +41,8 @@
     getAvailableDocumentTypes().some(
       (availableDocumentType) => availableDocumentType.value === existingDocumentType.value
     );
-  
+
   const edit = (currentDocumentType, newDocumentType) => {
-    !checkIfDocumentIsAvailable(currentDocumentType) &&
      checkIfDocumentIsAvailable(newDocumentType)
       ? existingDocumentTypes = [
           ...existingDocumentTypes.filter(
@@ -112,7 +112,7 @@
   // remove multiple documentTypes
     existingDocumentTypes = existingDocumentTypes.filter(
       (existingDocumentType) =>
-        // returns true for document type that does not exist in existingDocumentTypes
+        // returns true for document type to delete that does not exist in existingDocumentTypes
         deleteEdi.filter(
           (documentTypesToDelete) =>
             existingDocumentType.value === documentTypesToDelete.value
