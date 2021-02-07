@@ -35,7 +35,7 @@ console.log("Initial Existing Document Types:- \n", edis, "\n")
 // has to be defaulted to emtpy array
 const documentTypes = [...configDataFromContainer.documentTypes].map((doc) => ({ ...doc, value: doc.documentTypeKey, label: doc.description }));
 
-const deleteEdi = [{ value: 6, label: 'Remittance Advice', statusKey: 0 }, { value: 5, label: 'Claim', statusKey: 0 }];
+const deleteEdi = [addEdi, replaceEdi];
 const ediToEdit = {
   documentTypeKey: 4,
   description: 'ASN',
