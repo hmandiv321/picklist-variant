@@ -65,7 +65,7 @@ const update = (edi) => [
   ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === edi.documentTypeKey).map((doc) => ({ ...doc, statusKey: edi.statusKey }))
 ]
 
-const saveEDI = () => edis.map((doc) => ({ documentTypeKey: doc.value, description: doc.label, statusKey: doc.statusKey }));
+const saveEDI = (edisToSave) => edisToSave.map((doc) => ({ documentTypeKey: doc.value, description: doc.label, statusKey: doc.statusKey }));
 /////////////////////////////////////////////////////////////////////////////////////
 // ADD \\
 /////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ edis = update(addEdi);
 console.log("New Existing Document Types:- \n", edis, "\n")
 console.log("New Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
 console.log("User Saves EDIS....\n")
-console.log("EDIS:- ", saveEDI(), "\n")
+console.log("EDIS:- ", saveEDI(edis), "\n")
 /////////////////////////////////////////////////////////////////////////////////////
 //EDIT\\
 /////////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ edis = update(replaceEdi)
 console.log("New Existing Document Types:- \n", edis, "\n")
 console.log("New Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
 console.log("User Saves EDIS....\n")
-console.log("EDIS:- ", saveEDI(), "\n")
+console.log("EDIS:- ", saveEDI(edis), "\n")
 /////////////////////////////////////////////////////////////////////////////////////
 //DELETE\\
 /////////////////////////////////////////////////////////////////////////////////////
@@ -131,6 +131,6 @@ edis = edis.filter(
 console.log("New Existing Document Types:- \n", edis, "\n")
 console.log("New Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
 console.log("User Saves EDIS....\n")
-console.log("EDIS:- ", saveEDI(), "\n")
+console.log("EDIS:- ", saveEDI(edis), "\n")
 
 /////////////////////////////////////////////////////////////////////////////////////
