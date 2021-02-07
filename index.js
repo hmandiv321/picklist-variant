@@ -55,11 +55,6 @@ const getAvailableDocumentTypes = () => documentTypes.filter(
 );
 console.log("Initial Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
 
-const isDocumentAvailable = (edi) =>
-  getAvailableDocumentTypes().some(
-    (availableDocumentType) => availableDocumentType.documentTypeKey === edi.documentTypeKey
-  );
-
 const update = (edi) => [
   ...edis,
   ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === edi.documentTypeKey).map((doc) => ({ ...doc, statusKey: edi.statusKey }))
@@ -79,7 +74,9 @@ console.log("USER TRIES TO ADD A NEW DOCUMENT TYPE TO THE EXISTING DOCUMENT TYPE
 console.log(`${JSON.stringify(addEdi)}\n`)
 console.log(".....................................................................\n")
 
-console.log(`USER SHOULD BE ABLE TO ADD: ${isDocumentAvailable(addEdi)}`, "\n")
+console.log(`USER SHOULD BE ABLE TO ADD: ${getAvailableDocumentTypes().some(
+    (availableDocumentType) => availableDocumentType.documentTypeKey === addEdi.documentTypeKey
+)}`, "\n")
 
 edis = update(addEdi);
 
