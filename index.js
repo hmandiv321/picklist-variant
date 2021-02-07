@@ -44,21 +44,17 @@ const ediToEdit = {
   label: 'ASN',
 };
 
-// derived from both edis and documentTypes
-const getAvailableDocumentTypes = () => documentTypes.filter(
-  (documentType) =>
-    // returns true for document type that does not exist in edis
-    edis.filter(
-      (edi) =>
-        documentType.documentTypeKey === edi.documentTypeKey
-    ).length === 0
-);
-console.log("Initial Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
+// returns true if a document type does not exist
+const doesItContain = (documentTypes, documentType) =>
+      documentTypes.filter(
+        (doc) => documentType.documentTypeKey === doc.documentTypeKey
+      ).length > 0;
 
-const update = (edi) => [
-  ...edis,
-  ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === edi.documentTypeKey).map((doc) => ({ ...doc, statusKey: edi.statusKey }))
-]
+// derived from both edis and documentTypes
+const getAvailableDocumentTypes = () =>
+    documentTypes.filter((documentType) => !doesItContain(edis, documentType));
+
+console.log("Initial Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
 
 const saveEDI = (edisToSave) => edisToSave.map((doc) => ({ documentTypeKey: doc.value, description: doc.label, statusKey: doc.statusKey }));
 /////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +74,10 @@ console.log(`USER SHOULD BE ABLE TO ADD: ${getAvailableDocumentTypes().some(
     (availableDocumentType) => availableDocumentType.documentTypeKey === addEdi.documentTypeKey
 )}`, "\n")
 
-edis = update(addEdi);
+edis = [
+  ...edis,
+  ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === addEdi.documentTypeKey).map((doc) => ({ ...doc, statusKey: addEdi.statusKey }))
+];
 
 console.log("New Existing Document Types:- \n", edis, "\n")
 console.log("New Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
@@ -96,7 +95,13 @@ console.log(`Replaces ${JSON.stringify(ediToEdit)}\n`)
 console.log(`Adds ${JSON.stringify(replaceEdi)}\n`)
 console.log(".....................................................................\n")
 
-edis = update(replaceEdi)
+/////////////////////////////////////////////////////////////////////////////////////
+  // needs to know which edi will be replaced
+  edis = [
+    ...edis.filter((edi) => edi.documentTypeKey !== ediToEdit.documentTypeKey),
+    ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === replaceEdi.documentTypeKey).map((doc) => ({ ...doc, statusKey: replaceEdi.statusKey }))
+  ];
+/////////////////////////////////////////////////////////////////////////////////////
 
 console.log("New Existing Document Types:- \n", edis, "\n")
 console.log("New Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
@@ -116,14 +121,7 @@ console.log(`${JSON.stringify(deleteEdi)}\n`)
 console.log(".....................................................................\n")
 
 // remove multiple documentTypes
-edis = edis.filter(
-  (edi) =>
-    // returns true for document type to delete that does not exist in edis
-    deleteEdi.filter(
-      (documentTypesToDelete) =>
-        edi.documentTypeKey === documentTypesToDelete.documentTypeKey
-    ).length === 0
-);
+edis = edis.filter((edi) => !doesItContain(deleteEdi, edi));
 
 console.log("New Existing Document Types:- \n", edis, "\n")
 console.log("New Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
