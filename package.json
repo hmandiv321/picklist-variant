@@ -1,0 +1,24 @@
+{
+  "name": "picklist-variant",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hmandiv321/picklist-variant.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hmandiv321/picklist-variant/issues"
+  },
+  "homepage": "https://github.com/hmandiv321/picklist-variant#readme",
+  "dependencies": {
+    "eslint": "^7.19.0",
+    "prettier": "^2.2.1"
+  }
+}
