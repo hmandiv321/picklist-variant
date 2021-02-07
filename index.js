@@ -1,82 +1,131 @@
+const {addEdi, replaceEdi} = require('./form');
+// initial load
+  console.log("Loading..............................................................\n")
+
 
   // inputs
-  const edis = [
-    // { documentTypeKey: 6, description: 'Remittance Advice' },
-    {documentTypeKey: 4,  description: 'ASN' },
-    {documentTypeKey: 1, description: 'Invoice' },
-    // {documentTypeKey: 5,  description: 'Claim' },
-    // { documentTypeKey: 2, description: 'PO' },
-    {documentTypeKey: 3, description: 'PO Acknowledgement Status'},
-  ].map((doc)=> ({value: doc.documentTypeKey, label: doc.description}));
-
-  const documentTypes = [
-    {documentTypeKey: 1,  description: 'Invoice' },
-    {documentTypeKey: 2,  description: 'PO' },
-    {documentTypeKey: 3, description: 'PO Acknowledgement Status'},
-    {documentTypeKey: 4,  description: 'ASN' },
-    {documentTypeKey: 5,  description: 'Claim' },
-    { documentTypeKey: 6, description: 'Remittance Advice' }
-  ].map((doc)=> ({value: doc.documentTypeKey, label: doc.description}));
-
-  const addEdi = { value: 6, label: 'Remittance Advice' };
-  const deleteEdi = [{ value: 6, label: 'Remittance Advice' },{value: 5,  label: 'Claim' }]; 
-  const editEdi = { value: 1, label: 'Invoice' }; 
-
-  // derived from edis 
-  let existingDocumentTypes = [...edis];
-
-  // derived from both existingDocumentTypes and documentTypes
-  const getAvailableDocumentTypes = () => documentTypes.filter(
-    (documentType) =>
-      existingDocumentTypes.filter(
-        (existingDocumentType) =>
-          documentType.value === existingDocumentType.value
-      ).length === 0
-  );
-
-  const isDocumentAvailable = (existingDocumentType) =>
-    getAvailableDocumentTypes().some(
-      (availableDocumentType) => availableDocumentType.value === existingDocumentType.value
-    );
-
-  const edit = (currentDocumentType, newDocumentType) => {
-     isDocumentAvailable(newDocumentType)
-      ? existingDocumentTypes = [
-          ...existingDocumentTypes.filter(
-            (doc) => doc.value !== currentDocumentType.value
-          ),
-          newDocumentType,
-        ]
-      : existingDocumentTypes;
+  const configDataFromContainer = {
+    // has to be defaulted to emtpy array
+    edis: [
+            { documentTypeKey: 6, description: 'Remittance Advice', statusKey: 0 },
+            {documentTypeKey: 4,  description: 'ASN', statusKey: 0 },
+            // {documentTypeKey: 1, description: 'Invoice', statusKey: 0 },
+            // {documentTypeKey: 5,  description: 'Claim', statusKey: 0 },
+            // { documentTypeKey: 2, description: 'PO', statusKey: 0 },
+            {documentTypeKey: 3, description: 'PO Acknowledgement Status', statusKey: 0},
+          ],
+    // has to be defaulted to emtpy array
+    documentTypes: [
+            {documentTypeKey: 1,  description: 'Invoice' },
+            {documentTypeKey: 2,  description: 'PO' },
+            {documentTypeKey: 3, description: 'PO Acknowledgement Status'},
+            {documentTypeKey: 4,  description: 'ASN' },
+            {documentTypeKey: 5,  description: 'Claim' },
+            { documentTypeKey: 6, description: 'Remittance Advice' }
+          ],
+    statuses: [
+                {key:0, value: 'Test'}
+              ]
   }
 
-  const saveEDI = () => existingDocumentTypes.map((doc)=>({documentTypeKey: doc.value, description: doc.label}));
+  // has to be defaulted to emtpy array
+  let edis = [...configDataFromContainer.edis].map((doc)=> ({...doc, value: doc.documentTypeKey, label: doc.description}));
+  console.log("Initial Existing Document Types:- \n",edis,"\n")
+  
+  // has to be defaulted to emtpy array
+  const documentTypes = [...configDataFromContainer.documentTypes].map((doc)=> ({...doc,value: doc.documentTypeKey, label: doc.description}));
+
+  const deleteEdi = [{ value: 6, label: 'Remittance Advice', statusKey: 0 },{value: 5,  label: 'Claim', statusKey: 0 }]; 
+  const editEdi = { documentTypeKey: 1, statusKey: 0 };
+  
+  // derived from both edis and documentTypes
+  const getAvailableDocumentTypes = () => documentTypes.filter(
+    (documentType) =>
+      // returns true for document type that does not exist in edis
+      edis.filter(
+        (edi) =>
+          documentType.documentTypeKey === edi.documentTypeKey
+      ).length === 0
+  );
+  console.log("Initial Available Document Types:- \n",getAvailableDocumentTypes(),"\n")
+
+  const isDocumentAvailable = (edi) =>
+    getAvailableDocumentTypes().some(
+      (availableDocumentType) => availableDocumentType.documentTypeKey === edi.documentTypeKey
+    );
+
+  const saveEDI = () => edis.map((doc)=>({documentTypeKey: doc.value, description: doc.label,statusKey:doc.statusKey}));
 /////////////////////////////////////////////////////////////////////////////////////
                                   // ADD \\
 /////////////////////////////////////////////////////////////////////////////////////
 
-  existingDocumentTypes = isDocumentAvailable(addEdi) ? [
-    ...existingDocumentTypes,
-    addEdi
-  ] : existingDocumentTypes;
+  // user adds a new documentType
+  // can add document only when they are available
+  // have to figure ux flow and control as to how a user will add
+  // this is just to check how the data can grow automatically
+  console.log(".....................................................................\n")
+  console.log("USER TRIES TO ADD A NEW DOCUMENT TYPE TO THE EXISTING DOCUMENT TYPES\n")
+  console.log(`${JSON.stringify(addEdi)}\n`)
+  console.log(".....................................................................\n")
 
+  console.log(`USER SHOULD BE ABLE TO ADD: ${isDocumentAvailable(addEdi)}`,"\n")
+
+  edis = [
+    ...edis,
+    ...getAvailableDocumentTypes().filter((doc)=> doc.documentTypeKey === addEdi.documentTypeKey).map((doc)=> ({...doc, statusKey:addEdi.statusKey}))
+  ]
+
+  console.log("New Existing Document Types:- \n",edis,"\n")
+  console.log("New Available Document Types:- \n",getAvailableDocumentTypes(),"\n")
+  console.log("User Saves EDIS....\n")
+  console.log("EDIS:- ",saveEDI(),"\n")
 /////////////////////////////////////////////////////////////////////////////////////
                                 //EDIT\\
 /////////////////////////////////////////////////////////////////////////////////////
+  // have to figure ux flow and control as to how a user will edit
+  // this is just to check how the data can be switched automatically
+  // user edits a document type
+  console.log(".....................................................................\n")
+  console.log("USER EDITS A DOCUMENT TYPE\n")
+  console.log(`Replaces ${JSON.stringify(editEdi)}\n`)
+  console.log(`Adds ${JSON.stringify(replaceEdi)}\n`)
+  console.log(".....................................................................\n")
 
-  edit(editEdi, getAvailableDocumentTypes()[0]);
+  edis = [
+    ...edis,
+    ...getAvailableDocumentTypes().filter((doc)=> doc.documentTypeKey === replaceEdi.documentTypeKey).map((doc)=> ({...doc, statusKey:addEdi.statusKey}))
+  ];
 
+  console.log("New Existing Document Types:- \n",edis,"\n")
+  console.log("New Available Document Types:- \n",getAvailableDocumentTypes(),"\n")
+  console.log("User Saves EDIS....\n")
+  console.log("EDIS:- ",saveEDI(),"\n")
 /////////////////////////////////////////////////////////////////////////////////////
                                 //DELETE\\
 /////////////////////////////////////////////////////////////////////////////////////
 
+  // have to figure ux flow and control as to how a user will delete
+  // this is just to check how the data can shrink automatically
+  // user removes a document type
+  // this removed document type should be available
+  console.log(".....................................................................\n")
+  console.log("USER REMOVES DOCUMENT TYPE/s\n")
+  console.log(`${JSON.stringify(deleteEdi)}\n`)
+  console.log(".....................................................................\n")
+
   // remove multiple documentTypes
-    existingDocumentTypes = existingDocumentTypes.filter(
-      (existingDocumentType) =>
+    edis = edis.filter(
+      (edi) =>
+        // returns true for document type to delete that does not exist in edis
         deleteEdi.filter(
           (documentTypesToDelete) =>
-            existingDocumentType.value === documentTypesToDelete.value
+            edi.documentTypeKey === documentTypesToDelete.documentTypeKey
         ).length === 0
     );
+
+  console.log("New Existing Document Types:- \n",edis,"\n")
+  console.log("New Available Document Types:- \n",getAvailableDocumentTypes(),"\n")
+  console.log("User Saves EDIS....\n")
+  console.log("EDIS:- ",saveEDI(),"\n")
 
 /////////////////////////////////////////////////////////////////////////////////////
