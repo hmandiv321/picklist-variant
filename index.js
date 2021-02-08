@@ -1,17 +1,17 @@
-//form mock
+// initial load
 const { addEdi, replaceEdi } = require('./form');
-
-// inputs
-const { edisInDB, documentTypesInDB, statusesInDB } = require('./container');
+const configDataFromContainer= require('./container');
 
 console.log("Loading..............................................................\n")
 
+// inputs
+
 let actionToPerform = '';
 
-let edis = [...edisInDB || []].map((doc) => ({ ...doc, value: doc.documentTypeKey, label: doc.description }));
+let edis = [...configDataFromContainer.edisInDB || []].map((doc) => ({ ...doc, value: doc.documentTypeKey, label: doc.description }));
 console.log("Initial Existing Document Types:- \n", edis, "\n")
 
-const documentTypes = [...documentTypesInDB || []].map((doc) => ({ ...doc, value: doc.documentTypeKey, label: doc.description }));
+const documentTypes = [...configDataFromContainer.documentTypesInDB || []].map((doc) => ({ ...doc, value: doc.documentTypeKey, label: doc.description }));
 
 const deleteEdi = [addEdi, replaceEdi];
 const ediToEdit = {

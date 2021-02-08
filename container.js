@@ -1,7 +1,7 @@
-module.exports = {
+const configDataFromContainer = {
   edisInDB: [
-    // { documentTypeKey: 6, description: 'Remittance Advice', statusKey: 0 },
-    // { documentTypeKey: 4, description: 'ASN', statusKey: 0 },
+    { documentTypeKey: 6, description: 'Remittance Advice', statusKey: 0 },
+    { documentTypeKey: 4, description: 'ASN', statusKey: 0 },
     { documentTypeKey: 1, description: 'Invoice', statusKey: 0 },
     // { documentTypeKey: 5,  description: 'Claim', statusKey: 0 },
     // { documentTypeKey: 2, description: 'PO', statusKey: 0 },
@@ -19,3 +19,5 @@ module.exports = {
     { key: 1, value: 'Test' }
   ]
 }
+
+module.exports = configDataFromContainer;
