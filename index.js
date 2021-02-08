@@ -36,7 +36,7 @@ console.log("Initial Available Document Types:- \n", getAvailableDocumentTypes()
 
 const saveEDI = (edisToSave) => edisToSave.map((doc) => ({ documentTypeKey: doc.value, description: doc.label, statusKey: doc.statusKey }));
 
-const save = (document = null) => {
+const save = (document = { documentTypeKey: 0 }) => {
   switch (actionToPerform) {
     case 'create':
       edis = [

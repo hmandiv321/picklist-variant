@@ -22,6 +22,6 @@
 
 
   module.exports = {
-    addEdi: { documentTypeKey: 6, statusKey: 1 },
-    replaceEdi : {documentTypeKey: 2, statusKey: 1  }
+    addEdi: null || { documentTypeKey: 0 },
+    replaceEdi : null || { documentTypeKey: 0 }
   };
