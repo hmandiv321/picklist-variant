@@ -60,12 +60,12 @@ console.log("Initial Available Document Types:- \n", getAvailableDocumentTypes()
 
 const saveEDI = (edisToSave) => edisToSave.map((doc) => ({ documentTypeKey: doc.value, description: doc.label, statusKey: doc.statusKey }));
 
-const save = () => {
+const save = (document = null) => {
   switch (actionToPerform) {
     case 'create':
       edis = [
         ...edis,
-        ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === addEdi.documentTypeKey).map((doc) => ({ ...doc, statusKey: addEdi.statusKey }))
+        ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === document.documentTypeKey).map((doc) => ({ ...doc, statusKey: document.statusKey }))
       ];
 
       console.log("New Existing Document Types:- \n", edis, "\n");
@@ -77,7 +77,7 @@ const save = () => {
     case 'update':
       edis = [
         ...edis.filter((edi) => edi.documentTypeKey !== ediToEdit.documentTypeKey),
-        ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === replaceEdi.documentTypeKey).map((doc) => ({ ...doc, statusKey: replaceEdi.statusKey }))
+        ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === document.documentTypeKey).map((doc) => ({ ...doc, statusKey: document.statusKey }))
       ];
       
       console.log("New Existing Document Types:- \n", edis, "\n");
@@ -119,7 +119,7 @@ console.log(`USER SHOULD BE ABLE TO ADD: ${getAvailableDocumentTypes().some(
 )}`, "\n")
 
 actionToPerform = 'create';
-save();
+save(addEdi);
 
 /////////////////////////////////////////////////////////////////////////////////////
 //EDIT\\
@@ -134,13 +134,13 @@ console.log(`Adds ${JSON.stringify(replaceEdi)}\n`)
 console.log(".....................................................................\n")
 
 /////////////////////////////////////////////////////////////////////////////////////
-  // needs to know which edi will be replaced
+  // needs to know which edi will be replaced ==> uses ediToEdit
   // edis = [
   //   ...edis.filter((edi) => edi.documentTypeKey !== ediToEdit.documentTypeKey),
   //   ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === replaceEdi.documentTypeKey).map((doc) => ({ ...doc, statusKey: replaceEdi.statusKey }))
   // ];
   actionToPerform = 'update';
-  save();
+  save(replaceEdi);
 
 /////////////////////////////////////////////////////////////////////////////////////
 //DELETE\\
