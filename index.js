@@ -1,47 +1,28 @@
-const { addEdi, replaceEdi } = require('./form');
 // initial load
-console.log("Loading..............................................................\n")
+const { addEdi, replaceEdi } = require('./form');
+const { edisInDB, documentTypesInDB, statusesInDB } = require('./container');
 
+console.log("Loading..............................................................\n")
 
 // inputs
 const configDataFromContainer = {
-  // has to be defaulted to emtpy array
-  edis: [
-    // { documentTypeKey: 6, description: 'Remittance Advice', statusKey: 0 },
-    // { documentTypeKey: 4, description: 'ASN', statusKey: 0 },
-    { documentTypeKey: 1, description: 'Invoice', statusKey: 0 },
-    // { documentTypeKey: 5,  description: 'Claim', statusKey: 0 },
-    // { documentTypeKey: 2, description: 'PO', statusKey: 0 },
-    // { documentTypeKey: 3, description: 'PO Acknowledgement Status', statusKey: 0 },
-  ],
-  // has to be defaulted to emtpy array
-  documentTypes: [
-    { documentTypeKey: 1, description: 'Invoice' },
-    { documentTypeKey: 2, description: 'PO' },
-    { documentTypeKey: 3, description: 'PO Acknowledgement Status' },
-    { documentTypeKey: 4, description: 'ASN' },
-    { documentTypeKey: 5, description: 'Claim' },
-    { documentTypeKey: 6, description: 'Remittance Advice' }
-  ],
-  statuses: [
-    { key: 0, value: 'Test' }
-  ]
+  edis: edisInDB || [],
+  documentTypes: documentTypesInDB || [],
+  statuses: statusesInDB || []
 }
 
 let actionToPerform = '';
 
-// has to be defaulted to emtpy array
 let edis = [...configDataFromContainer.edis].map((doc) => ({ ...doc, value: doc.documentTypeKey, label: doc.description }));
 console.log("Initial Existing Document Types:- \n", edis, "\n")
 
-// has to be defaulted to emtpy array
 const documentTypes = [...configDataFromContainer.documentTypes].map((doc) => ({ ...doc, value: doc.documentTypeKey, label: doc.description }));
 
 const deleteEdi = [addEdi, replaceEdi];
 const ediToEdit = {
   documentTypeKey: 4,
   description: 'ASN',
-  statusKey: 0,
+  statusKey: 1,
   value: 4,
   label: 'ASN',
 };

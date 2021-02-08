@@ -4,7 +4,7 @@
       edi: {
         documentTypeKey: 4,
         description: 'ASN',
-        statusKey: 0,
+        statusKey: 1,
         value: 4,
         label: 'ASN',
       },
@@ -22,6 +22,6 @@
 
 
   module.exports = {
-    addEdi: { documentTypeKey: 6, statusKey: 0 },
-    replaceEdi : {documentTypeKey: 2, statusKey: 0  }
+    addEdi: { documentTypeKey: 6, statusKey: 1 },
+    replaceEdi : {documentTypeKey: 2, statusKey: 1  }
   };
