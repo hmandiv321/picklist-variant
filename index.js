@@ -9,9 +9,9 @@ const configDataFromContainer = {
   edis: [
     { documentTypeKey: 6, description: 'Remittance Advice', statusKey: 0 },
     { documentTypeKey: 4, description: 'ASN', statusKey: 0 },
-    // {documentTypeKey: 1, description: 'Invoice', statusKey: 0 },
-    // {documentTypeKey: 5,  description: 'Claim', statusKey: 0 },
-    // { documentTypeKey: 2, description: 'PO', statusKey: 0 },
+    { documentTypeKey: 1, description: 'Invoice', statusKey: 0 },
+    { documentTypeKey: 5,  description: 'Claim', statusKey: 0 },
+    { documentTypeKey: 2, description: 'PO', statusKey: 0 },
     { documentTypeKey: 3, description: 'PO Acknowledgement Status', statusKey: 0 },
   ],
   // has to be defaulted to emtpy array
@@ -27,6 +27,8 @@ const configDataFromContainer = {
     { key: 0, value: 'Test' }
   ]
 }
+
+let actionToPerform = '';
 
 // has to be defaulted to emtpy array
 let edis = [...configDataFromContainer.edis].map((doc) => ({ ...doc, value: doc.documentTypeKey, label: doc.description }));
@@ -57,6 +59,48 @@ const getAvailableDocumentTypes = () =>
 console.log("Initial Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
 
 const saveEDI = (edisToSave) => edisToSave.map((doc) => ({ documentTypeKey: doc.value, description: doc.label, statusKey: doc.statusKey }));
+
+const save = () => {
+  switch (actionToPerform) {
+    case 'create':
+      edis = [
+        ...edis,
+        ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === addEdi.documentTypeKey).map((doc) => ({ ...doc, statusKey: addEdi.statusKey }))
+      ];
+
+      console.log("New Existing Document Types:- \n", edis, "\n");
+      console.log("New Available Document Types:- \n", getAvailableDocumentTypes(), "\n");
+      console.log("User Saves EDIS....\n");
+      console.log("EDIS:- ", saveEDI(edis), "\n");
+      // do other stuff thats needed
+      break;
+    case 'update':
+      edis = [
+        ...edis.filter((edi) => edi.documentTypeKey !== ediToEdit.documentTypeKey),
+        ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === replaceEdi.documentTypeKey).map((doc) => ({ ...doc, statusKey: replaceEdi.statusKey }))
+      ];
+      
+      console.log("New Existing Document Types:- \n", edis, "\n");
+      console.log("New Available Document Types:- \n", getAvailableDocumentTypes(), "\n");
+      console.log("User Saves EDIS....\n");
+      console.log("EDIS:- ", saveEDI(edis), "\n");
+      // do other stuff thats needed
+      break;
+    // delete wont be done this way, this is for demo only
+    case 'delete':
+      edis = edis.filter((edi) => !doesItContain(deleteEdi, edi));
+      
+      console.log("New Existing Document Types:- \n", edis, "\n")
+      console.log("New Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
+      console.log("User Saves EDIS....\n")
+      console.log("EDIS:- ", saveEDI(edis), "\n")
+      // do other stuff thats needed
+      break;
+    default:
+      this.actionToPerform = '';
+      break;
+  }
+}
 /////////////////////////////////////////////////////////////////////////////////////
 // ADD \\
 /////////////////////////////////////////////////////////////////////////////////////
@@ -74,15 +118,9 @@ console.log(`USER SHOULD BE ABLE TO ADD: ${getAvailableDocumentTypes().some(
     (availableDocumentType) => availableDocumentType.documentTypeKey === addEdi.documentTypeKey
 )}`, "\n")
 
-edis = [
-  ...edis,
-  ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === addEdi.documentTypeKey).map((doc) => ({ ...doc, statusKey: addEdi.statusKey }))
-];
+actionToPerform = 'create';
+save();
 
-console.log("New Existing Document Types:- \n", edis, "\n")
-console.log("New Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
-console.log("User Saves EDIS....\n")
-console.log("EDIS:- ", saveEDI(edis), "\n")
 /////////////////////////////////////////////////////////////////////////////////////
 //EDIT\\
 /////////////////////////////////////////////////////////////////////////////////////
@@ -97,16 +135,13 @@ console.log("...................................................................
 
 /////////////////////////////////////////////////////////////////////////////////////
   // needs to know which edi will be replaced
-  edis = [
-    ...edis.filter((edi) => edi.documentTypeKey !== ediToEdit.documentTypeKey),
-    ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === replaceEdi.documentTypeKey).map((doc) => ({ ...doc, statusKey: replaceEdi.statusKey }))
-  ];
-/////////////////////////////////////////////////////////////////////////////////////
+  // edis = [
+  //   ...edis.filter((edi) => edi.documentTypeKey !== ediToEdit.documentTypeKey),
+  //   ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === replaceEdi.documentTypeKey).map((doc) => ({ ...doc, statusKey: replaceEdi.statusKey }))
+  // ];
+  actionToPerform = 'update';
+  save();
 
-console.log("New Existing Document Types:- \n", edis, "\n")
-console.log("New Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
-console.log("User Saves EDIS....\n")
-console.log("EDIS:- ", saveEDI(edis), "\n")
 /////////////////////////////////////////////////////////////////////////////////////
 //DELETE\\
 /////////////////////////////////////////////////////////////////////////////////////
@@ -121,11 +156,7 @@ console.log(`${JSON.stringify(deleteEdi)}\n`)
 console.log(".....................................................................\n")
 
 // remove multiple documentTypes
-edis = edis.filter((edi) => !doesItContain(deleteEdi, edi));
-
-console.log("New Existing Document Types:- \n", edis, "\n")
-console.log("New Available Document Types:- \n", getAvailableDocumentTypes(), "\n")
-console.log("User Saves EDIS....\n")
-console.log("EDIS:- ", saveEDI(edis), "\n")
+actionToPerform = 'delete';
+save();
 
 /////////////////////////////////////////////////////////////////////////////////////
