@@ -1,10 +1,10 @@
-// initial load
+// form mock
 const { addEdi, replaceEdi } = require('./form');
-const configDataFromContainer= require('./container');
+
+// Input
+const configDataFromContainer = require('./container');
 
 console.log("Loading..............................................................\n")
-
-// inputs
 
 let actionToPerform = '';
 
