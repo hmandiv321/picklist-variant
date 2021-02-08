@@ -13,7 +13,7 @@ console.log("Initial Existing Document Types:- \n", edis, "\n")
 
 const documentTypes = [...configDataFromContainer.documentTypesInDB || []].map((doc) => ({ ...doc, value: doc.documentTypeKey, label: doc.description }));
 
-const deleteEdi = [addEdi, replaceEdi];
+const deleteEdi = [addEdi || { documentTypeKey: 0 }, replaceEdi || { documentTypeKey: 0 }];
 const ediToEdit = {
   documentTypeKey: 4,
   description: 'ASN',
@@ -92,11 +92,11 @@ console.log(`${JSON.stringify(addEdi)}\n`)
 console.log(".....................................................................\n")
 
 console.log(`USER SHOULD BE ABLE TO ADD: ${getAvailableDocumentTypes().some(
-    (availableDocumentType) => availableDocumentType.documentTypeKey === addEdi.documentTypeKey
+    (availableDocumentType) => availableDocumentType.documentTypeKey === (addEdi || { documentTypeKey: 0 }).documentTypeKey
 )}`, "\n")
 
 actionToPerform = 'create';
-save(addEdi);
+save(addEdi || { documentTypeKey: 0 });
 
 /////////////////////////////////////////////////////////////////////////////////////
 //EDIT\\
@@ -117,7 +117,7 @@ console.log("...................................................................
   //   ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === replaceEdi.documentTypeKey).map((doc) => ({ ...doc, statusKey: replaceEdi.statusKey }))
   // ];
   actionToPerform = 'update';
-  save(replaceEdi);
+  save(replaceEdi || { documentTypeKey: 0 });
 
 /////////////////////////////////////////////////////////////////////////////////////
 //DELETE\\
