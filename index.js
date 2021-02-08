@@ -7,12 +7,12 @@ console.log("Loading............................................................
 const configDataFromContainer = {
   // has to be defaulted to emtpy array
   edis: [
-    { documentTypeKey: 6, description: 'Remittance Advice', statusKey: 0 },
-    { documentTypeKey: 4, description: 'ASN', statusKey: 0 },
+    // { documentTypeKey: 6, description: 'Remittance Advice', statusKey: 0 },
+    // { documentTypeKey: 4, description: 'ASN', statusKey: 0 },
     { documentTypeKey: 1, description: 'Invoice', statusKey: 0 },
-    { documentTypeKey: 5,  description: 'Claim', statusKey: 0 },
-    { documentTypeKey: 2, description: 'PO', statusKey: 0 },
-    { documentTypeKey: 3, description: 'PO Acknowledgement Status', statusKey: 0 },
+    // { documentTypeKey: 5,  description: 'Claim', statusKey: 0 },
+    // { documentTypeKey: 2, description: 'PO', statusKey: 0 },
+    // { documentTypeKey: 3, description: 'PO Acknowledgement Status', statusKey: 0 },
   ],
   // has to be defaulted to emtpy array
   documentTypes: [
@@ -76,6 +76,7 @@ const save = (document = null) => {
       break;
     case 'update':
       edis = [
+        // needs to know which edi will be replaced ==> uses ediToEdit
         ...edis.filter((edi) => edi.documentTypeKey !== ediToEdit.documentTypeKey),
         ...getAvailableDocumentTypes().filter((doc) => doc.documentTypeKey === document.documentTypeKey).map((doc) => ({ ...doc, statusKey: document.statusKey }))
       ];
